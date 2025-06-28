@@ -66,7 +66,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: 
+    background:
         radial-gradient(2px 2px at 20px 30px, #ffffff, transparent),
         radial-gradient(2px 2px at 40px 70px, #ffffff, transparent),
         radial-gradient(1px 1px at 90px 40px, #ffffff, transparent),
@@ -86,7 +86,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: 
+    background:
         radial-gradient(1px 1px at 50px 50px, #ffffff, transparent),
         radial-gradient(2px 2px at 100px 120px, #ffffff, transparent),
         radial-gradient(1px 1px at 150px 60px, #ffffff, transparent);
@@ -101,6 +101,7 @@
     0% {
         transform: translateX(0) translateY(0);
     }
+
     100% {
         transform: translateX(-200px) translateY(-100px);
     }
@@ -264,10 +265,134 @@ nav#navbar ul li a:hover {
     color: #ddd;
 }
 
+/*=====Live STARS FOR CONTAINER=====*/ 
 .container {
     max-width: 1000px;
     margin: 2rem auto;
     padding: 0 1.5rem;
+    position: relative;
+    /* Add these properties */
+    background: #000;
+    overflow: hidden;
+}
+
+/* Main star layer */
+.container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+        radial-gradient(1px 1px at 20px 30px, rgba(255, 255, 255, 0.8), transparent),
+        radial-gradient(1px 1px at 40px 70px, rgba(255, 255, 255, 0.6), transparent),
+        radial-gradient(1px 1px at 90px 40px, rgba(255, 255, 255, 0.9), transparent),
+        radial-gradient(1px 1px at 130px 80px, rgba(255, 255, 255, 0.7), transparent),
+        radial-gradient(1px 1px at 160px 30px, rgba(255, 255, 255, 0.5), transparent),
+        radial-gradient(2px 2px at 200px 120px, rgba(255, 255, 255, 0.4), transparent),
+        radial-gradient(1px 1px at 240px 60px, rgba(255, 255, 255, 0.8), transparent),
+        radial-gradient(1px 1px at 280px 90px, rgba(255, 255, 255, 0.6), transparent);
+    background-repeat: repeat;
+    background-size: 400px 200px, 350px 180px, 450px 220px, 380px 190px, 420px 210px, 360px 170px, 390px 200px, 410px 180px;
+    animation:
+        grokStars1 25s linear infinite,
+        grokStars2 30s linear infinite reverse,
+        grokStars3 35s linear infinite;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Secondary star layer for depth */
+.container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+        radial-gradient(1px 1px at 50px 50px, rgba(255, 255, 255, 0.3), transparent),
+        radial-gradient(2px 2px at 100px 120px, rgba(255, 255, 255, 0.4), transparent),
+        radial-gradient(1px 1px at 150px 60px, rgba(255, 255, 255, 0.2), transparent),
+        radial-gradient(1px 1px at 200px 140px, rgba(255, 255, 255, 0.5), transparent),
+        radial-gradient(2px 2px at 250px 80px, rgba(255, 255, 255, 0.3), transparent);
+    background-repeat: repeat;
+    background-size: 500px 250px, 480px 240px, 520px 260px, 460px 230px, 490px 245px;
+    animation:
+        grokStarsDeep1 40s linear infinite,
+        grokStarsDeep2 45s linear infinite reverse;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+/* Grok-style animation keyframes */
+@keyframes grokStars1 {
+    0% {
+        transform: translateX(0) translateY(0);
+    }
+
+    100% {
+        transform: translateX(-400px) translateY(-200px);
+    }
+}
+
+@keyframes grokStars2 {
+    0% {
+        transform: translateX(0) translateY(0) rotate(0deg);
+    }
+
+    100% {
+        transform: translateX(350px) translateY(-180px) rotate(360deg);
+    }
+}
+
+@keyframes grokStars3 {
+    0% {
+        transform: translateX(0) translateY(0);
+    }
+
+    50% {
+        transform: translateX(-200px) translateY(100px);
+    }
+
+    100% {
+        transform: translateX(-450px) translateY(-220px);
+    }
+}
+
+@keyframes grokStarsDeep1 {
+    0% {
+        transform: translateX(0) translateY(0);
+    }
+
+    100% {
+        transform: translateX(-500px) translateY(-250px);
+    }
+}
+
+@keyframes grokStarsDeep2 {
+    0% {
+        transform: translateX(0) translateY(0) rotate(0deg);
+    }
+
+    100% {
+        transform: translateX(480px) translateY(-240px) rotate(-360deg);
+    }
+}
+
+/* Update your sections to have glass effect over stars */
+section {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 2;
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 section {
