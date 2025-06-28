@@ -9,27 +9,50 @@
 </head>
 
 <body>
-    <header>
-        <h1>Stiven Doktorov</h1>
-        <p>Full-Stack Developer in Training</p>
-        <img id="profile-photo" src="" alt="Stiven Doktorov">
-        <div class="contact-info">
-            <span>8052 Zürich, Staudenbühlstrasse 126, Switzerland</span> |
-            <span>+41 76 525 9731</span> |
-            <a href="mailto:s.doktorov123@gmail.com">s.doktorov123@gmail.com</a> |
-            <span>Married | Greek Nationality | Permit B</span>
+    <div class="stars"></div>
+
+    <!-- Hero Section replacing the old header -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <img id="profile-photo" src="assets/images/profile-photo.jpg" alt="Stiven Doktorov - Full-Stack Developer in Training"
+                class="hero-profile-image">
+
+            <h1 class="hero-name">Stiven Doktorov</h1>
+
+            <h2 class="hero-title">Full-Stack Developer in Training</h2>
+
+            <div class="hero-contact">
+                <div class="contact-item">
+                    <span>📍 8052 Zürich, Staudenbühlstrasse 126, Switzerland</span>
+                </div>
+                <div class="contact-item">
+                    <span>📞 +41 76 525 9731</span>
+                </div>
+                <div class="contact-item">
+                    <a href="mailto:s.doktorov123@gmail.com">✉️ s.doktorov123@gmail.com</a>
+                </div>
+                <div class="contact-item">
+                    <span>👤 Married | Greek Nationality | Permit B</span>
+                </div>
+            </div>
+
+            <!-- Call-to-action buttons -->
+            <div class="hero-cta">
+                <a href="#projects" class="hero-btn primary">View My Work</a>
+                <a href="#experience" class="hero-btn">Experience</a>
+            </div>
         </div>
-        <nav id="navbar">
-            <ul>
-                <li><a href="#objective">Objective</a></li>
-                <li><a href="#skills">Skills</a></li>
-                <li><a href="#experience">Experience</a></li>
-                <li><a href="#education">Education</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#references">References</a></li>
-            </ul>
-        </nav>
-    </header>
+    </section>
+    <nav id="navbar">
+        <ul>
+            <li><a href="#objective">Objective</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#education">Education</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#references">References</a></li>
+        </ul>
+    </nav>
 
     <div class="container">
         <section id="objective">
@@ -53,7 +76,6 @@
                     Deutsch (A1-A2).</li>
             </ul>
         </section>
-
         <section id="education">
             <h2>Educational Background</h2>
             <div class="education">
