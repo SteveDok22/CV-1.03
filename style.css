@@ -270,7 +270,7 @@ nav#navbar ul li a:hover {
     max-width: 1000px;
     margin: 2rem auto;
     padding: 0 1.5rem;
-    position: relative;
+    /*position: relative;*/
     /* Add these properties */
     background: linear-gradient(358deg, #534f4f 0%, #000000 100%);
     overflow: hidden;
