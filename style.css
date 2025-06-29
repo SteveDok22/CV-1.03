@@ -272,7 +272,7 @@ nav#navbar ul li a:hover {
     padding: 0 1.5rem;
     /*position: relative;*/
     /* Add these properties */
-    background: linear-gradient(358deg, #534f4f 0%, #000000 100%);
+    background: linear-gradient(358deg, #353232 0%, #000000 100%);
     overflow: hidden;
 }
 
@@ -468,7 +468,7 @@ ul li::before {
 footer {
     text-align: center;
     padding: 1.5rem;
-    background: #534f4f;
+    background: #333;
     color: white;
     margin-top: 2rem;
 }
