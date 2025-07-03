@@ -1,5 +1,6 @@
 // Wait for DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function () {
+    console.log('Script loaded and DOM ready');
 
     // ===== ANIMATED STARS BACKGROUND =====
     const starsContainer = document.querySelector('.stars');
@@ -49,64 +50,83 @@ document.addEventListener('DOMContentLoaded', function () {
         photo.alt = 'Stiven Doktorov';
     }
 
-    // ===== FIXED HAMBURGER MENU FUNCTIONALITY =====
+    // =====  HAMBURGER MENU FUNCTIONALITY =====
     const navToggle = document.querySelector('.nav-toggle');
     const navMenu = document.querySelector('.nav-menu');
     const navLinks = document.querySelectorAll('.nav-menu a');
     const body = document.body;
 
-    // Toggle mobile menu
-    if (navToggle) {
-        navToggle.addEventListener('click', function(e) {
+    console.log('Navigation elements found:', {
+        navToggle: !!navToggle,
+        navMenu: !!navMenu,
+        navLinks: navLinks.length
+    });
+
+    // Toggle mobile menu with better event handling
+    if (navToggle && navMenu) {
+        navToggle.addEventListener('click', function (e) {
             e.preventDefault();
             e.stopPropagation();
-            
-            console.log('Hamburger clicked'); // Debug log
-            
+
+            console.log('Hamburger clicked - before toggle');
+            console.log('Menu active before:', navMenu.classList.contains('active'));
+
+            // Toggle classes
             navToggle.classList.toggle('active');
             navMenu.classList.toggle('active');
-            
-            // Prevent body scroll when menu is open
+
+            console.log('Menu active after:', navMenu.classList.contains('active'));
+
+            // FIXED: Prevent body scroll when menu is open
             if (navMenu.classList.contains('active')) {
                 body.classList.add('menu-open');
-                console.log('Menu opened'); // Debug log
+                console.log('Menu opened - body scroll disabled');
             } else {
                 body.classList.remove('menu-open');
-                console.log('Menu closed'); // Debug log
+                console.log('Menu closed - body scroll enabled');
             }
         });
+    } else {
+        console.error('Navigation elements not found!');
     }
 
-    // Close menu when clicking on a link
-    navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            console.log('Nav link clicked'); // Debug log
-            
+    //  Close menu when clicking on a link
+    navLinks.forEach((link, index) => {
+        link.addEventListener('click', function (e) {
+            console.log(`Nav link ${index + 1} clicked`);
+
+            // Close the mobile menu
             if (navToggle && navMenu) {
                 navToggle.classList.remove('active');
                 navMenu.classList.remove('active');
                 body.classList.remove('menu-open');
+                console.log('Menu closed via nav link click');
             }
         });
     });
 
-    // Close menu when clicking outside
-    document.addEventListener('click', function(e) {
-        if (navToggle && navMenu && 
-            !navToggle.contains(e.target) && 
-            !navMenu.contains(e.target)) {
-            navToggle.classList.remove('active');
-            navMenu.classList.remove('active');
-            body.classList.remove('menu-open');
+    //  Close menu when clicking outside
+    document.addEventListener('click', function (e) {
+        if (navToggle && navMenu) {
+            // Check if click is outside both toggle and menu
+            const isClickInsideNav = navToggle.contains(e.target) || navMenu.contains(e.target);
+
+            if (!isClickInsideNav && navMenu.classList.contains('active')) {
+                navToggle.classList.remove('active');
+                navMenu.classList.remove('active');
+                body.classList.remove('menu-open');
+                console.log('Menu closed via outside click');
+            }
         }
     });
 
     // Handle window resize
-    window.addEventListener('resize', function() {
+    window.addEventListener('resize', function () {
         if (window.innerWidth > 768 && navToggle && navMenu) {
             navToggle.classList.remove('active');
             navMenu.classList.remove('active');
             body.classList.remove('menu-open');
+            console.log('Menu closed via window resize');
         }
     });
 
@@ -114,23 +134,26 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
+            const targetId = this.getAttribute('href');
+            const target = document.querySelector(targetId);
+
             if (target) {
                 const offsetTop = target.offsetTop - 100; // Account for fixed navbar
                 window.scrollTo({
                     top: offsetTop,
                     behavior: 'smooth'
                 });
+                console.log(`Smooth scrolling to ${targetId}`);
             }
         });
     });
 
     // ===== ACTIVE STATE ON SCROLL =====
     const sections = document.querySelectorAll('[id]');
-    
+
     function updateActiveNav() {
         let current = '';
-        
+
         sections.forEach(section => {
             const sectionTop = section.offsetTop;
             const sectionHeight = section.clientHeight;
@@ -147,8 +170,15 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    window.addEventListener('scroll', updateActiveNav);
-    
+    // Throttled scroll event for better performance
+    let scrollTimeout;
+    window.addEventListener('scroll', function () {
+        if (scrollTimeout) {
+            clearTimeout(scrollTimeout);
+        }
+        scrollTimeout = setTimeout(updateActiveNav, 10);
+    });
+
     // Initial call to set active state
     updateActiveNav();
 
@@ -178,27 +208,58 @@ document.addEventListener('DOMContentLoaded', function () {
         observer.observe(section);
     });
 
-    // ===== ADDITIONAL MOBILE TOUCH HANDLING =====
+    // ===== MOBILE TOUCH HANDLING =====
     let touchStartX = 0;
     let touchStartY = 0;
+    let touchStartTime = 0;
 
-    document.addEventListener('touchstart', function(e) {
+    document.addEventListener('touchstart', function (e) {
         touchStartX = e.touches[0].clientX;
         touchStartY = e.touches[0].clientY;
-    });
+        touchStartTime = Date.now();
+    }, { passive: true });
 
-    document.addEventListener('touchmove', function(e) {
+    document.addEventListener('touchmove', function (e) {
+        // Only prevent scrolling when menu is active
         if (navMenu && navMenu.classList.contains('active')) {
-            // Prevent scrolling when menu is open
             e.preventDefault();
         }
     }, { passive: false });
 
+    //  Add swipe gesture to close menu
+    document.addEventListener('touchend', function (e) {
+        if (navMenu && navMenu.classList.contains('active')) {
+            const touchEndX = e.changedTouches[0].clientX;
+            const touchEndY = e.changedTouches[0].clientY;
+            const touchEndTime = Date.now();
+
+            const deltaX = touchEndX - touchStartX;
+            const deltaY = touchEndY - touchStartY;
+            const deltaTime = touchEndTime - touchStartTime;
+
+            // Check for swipe left gesture (close menu)
+            if (deltaTime < 300 && Math.abs(deltaX) > 50 && Math.abs(deltaY) < 100 && deltaX < 0) {
+                navToggle.classList.remove('active');
+                navMenu.classList.remove('active');
+                body.classList.remove('menu-open');
+                console.log('Menu closed via swipe gesture');
+            }
+        }
+    }, { passive: true });
+
     // ===== DEBUG INFORMATION =====
-    console.log('Script loaded successfully');
-    console.log('Navigation elements found:', {
-        navToggle: !!navToggle,
-        navMenu: !!navMenu,
-        navLinks: navLinks.length
-    });
+    console.log('Script initialization complete');
+    console.log('Viewport width:', window.innerWidth);
+    console.log('User agent:', navigator.userAgent);
+
+    // Test function for debugging
+    window.testHamburger = function () {
+        console.log('Testing hamburger menu...');
+        if (navToggle && navMenu) {
+            navToggle.click();
+            console.log('Hamburger clicked programmatically');
+        } else {
+            console.error('Navigation elements not found for test');
+        }
+    };
 });
