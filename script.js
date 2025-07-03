@@ -33,31 +33,30 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
 
-        // Create initial stars
+        // Create initial stars (reduced number for better performance)
         for (let i = 0; i < 30; i++) {
             createStar();
         }
 
-        // Continue creating new stars every 200ms
+        // Continue creating new stars every 300ms (reduced frequency)
         setInterval(createStar, 300);
     }
 
     // ===== PHOTO FUNCTIONALITY =====
     const photo = document.getElementById('profile-photo');
     if (photo) {
-        // Update the image path to match your HTML
         photo.src = 'assets/images/profile-photo.jpg';
         photo.alt = 'Stiven Doktorov';
     }
-});
-// ===== HUMBURGER RESPONSIVE NAVIGATION =====
-const navToggle = document.querySelector('.nav-toggle');
+
+    // ===== FIXED HAMBURGER MENU FUNCTIONALITY =====
+    const navToggle = document.querySelector('.nav-toggle');
     const navMenu = document.querySelector('.nav-menu');
     const navLinks = document.querySelectorAll('.nav-menu a');
     const body = document.body;
 
     // Toggle mobile menu
-     if (navToggle) {
+    if (navToggle) {
         navToggle.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
@@ -125,10 +124,11 @@ const navToggle = document.querySelector('.nav-toggle');
             }
         });
     });
-    // Active state on scroll
+
+    // ===== ACTIVE STATE ON SCROLL =====
     const sections = document.querySelectorAll('[id]');
     
-    window.addEventListener('scroll', function() {
+    function updateActiveNav() {
         let current = '';
         
         sections.forEach(section => {
@@ -145,15 +145,15 @@ const navToggle = document.querySelector('.nav-toggle');
                 link.classList.add('active');
             }
         });
-    });
+    }
 
     window.addEventListener('scroll', updateActiveNav);
     
     // Initial call to set active state
     updateActiveNav();
 
-// ===== STICKY NAVIGATION =====
-const navbar = document.getElementById('navbar');
+    // ===== STICKY NAVIGATION =====
+    const navbar = document.getElementById('navbar');
     if (navbar) {
         window.addEventListener('scroll', function () {
             if (window.scrollY > 50) {
@@ -164,24 +164,8 @@ const navbar = document.getElementById('navbar');
         });
     }
 
-// ===== SMOOTH SCROLL FOR INTERNAL LINKS =====
-document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth'
-                });
-            }
-        });
-    });
-});
-
-// ===== ANIMATION TRIGGER ON SCROLL =====
-document.addEventListener('DOMContentLoaded', function () {
-    const sections = document.querySelectorAll('section');
+    // ===== ANIMATION TRIGGER ON SCROLL =====
+    const sectionsToAnimate = document.querySelectorAll('section');
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -190,7 +174,31 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }, { threshold: 0.1 });
 
-    sections.forEach(section => {
+    sectionsToAnimate.forEach(section => {
         observer.observe(section);
+    });
+
+    // ===== ADDITIONAL MOBILE TOUCH HANDLING =====
+    let touchStartX = 0;
+    let touchStartY = 0;
+
+    document.addEventListener('touchstart', function(e) {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+    });
+
+    document.addEventListener('touchmove', function(e) {
+        if (navMenu && navMenu.classList.contains('active')) {
+            // Prevent scrolling when menu is open
+            e.preventDefault();
+        }
+    }, { passive: false });
+
+    // ===== DEBUG INFORMATION =====
+    console.log('Script loaded successfully');
+    console.log('Navigation elements found:', {
+        navToggle: !!navToggle,
+        navMenu: !!navMenu,
+        navLinks: navLinks.length
     });
 });
